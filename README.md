@@ -8,7 +8,7 @@ The problems it is designed to solve:
 * In languages such as python, the drivers are often riddled with performance issues,
   incompatibilities and installation issues. Some drivers do not implement BULK inserts,
   which are absolute musts for high performance processing.
-* Java has great database drivers for any platform or database.
+* Java has great database drivers for any vendor/platform.
 * Java is optimized and for small programs, the JIT compiler makes the code as performant
   as native code and sometimes even better. This is a great feature for loops you'd typically
   have in ETL.

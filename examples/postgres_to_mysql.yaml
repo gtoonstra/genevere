@@ -17,8 +17,24 @@ target:
     sql: >
       INSERT INTO rental ( rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update )
       VALUES (?, ?, ?, ?, ?, ?, ?)
+transforms:
+  - java_class: org.gt.transforms.JavascriptTransformer
+    config:
+      script: >
+        var ObjectArrayType = Java.type("java.lang.Object[]");
 
+        var transform = function(row) {
+          var xformed = new ObjectArrayType(7);
+
+          xformed[0] = row[0];
+          xformed[1] = row[1];
+          xformed[2] = row[2];
+          xformed[3] = row[3];
+          xformed[4] = row[4];
+          xformed[5] = row[5];
+          xformed[6] = row[6];
+
+          return xformed;
+        };
 #sourceConversion:
 #targetConversion:
-#transformations:
-#  user:

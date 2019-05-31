@@ -3,7 +3,9 @@ package org.gt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gt.pipeline.ReaderWriterConfig;
+import org.gt.pipeline.TransformConfig;
 
+import java.util.List;
 import java.util.Map;
 
 public class Configuration {
@@ -20,7 +22,7 @@ public class Configuration {
 
     private String sourceConversion;
     private String targetConversion;
-    private Map<String, String> transformations;
+    private List<TransformConfig> transforms;
 
     private String sourceUsername;
     private String sourcePassword;
@@ -59,12 +61,12 @@ public class Configuration {
         this.targetConversion = targetConversion;
     }
 
-    public Map<String, String> getTransformations() {
-        return transformations;
+    public List<TransformConfig> getTransforms() {
+        return transforms;
     }
 
-    public void setTransformations(Map<String, String> transformations) {
-        this.transformations = transformations;
+    public void setTransforms(List<TransformConfig> transforms) {
+        this.transforms = transforms;
     }
 
     public String getSourceUsername() {

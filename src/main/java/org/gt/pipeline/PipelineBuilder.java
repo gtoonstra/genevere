@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.gt.Configuration;
 import org.gt.GenevereException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PipelineBuilder {
 
     private static final Logger logger = LogManager.getLogger();
@@ -27,6 +30,15 @@ public class PipelineBuilder {
 
         pipeline.setReader(reader);
         pipeline.setWriter(writer);
+
+        List<ITransform> transforms = new ArrayList<ITransform>();
+        List<TransformConfig> transformConfigs = config.getTransforms();
+        for (TransformConfig transformConfig: transformConfigs) {
+            ITransform transform = transformConfig.getTransform();
+            transform.init_transform(transformConfig.getConfig());
+            transforms.add(transform);
+        }
+        pipeline.setTransforms(transforms);
 
         return pipeline;
     }

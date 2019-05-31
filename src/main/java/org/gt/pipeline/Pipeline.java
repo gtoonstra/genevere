@@ -17,6 +17,7 @@ public class Pipeline {
 
     private IReader reader;
     private IWriter writer;
+    private List<ITransform> transforms;
 
     public void setReader(IReader reader) {
         this.reader = reader;
@@ -25,6 +26,8 @@ public class Pipeline {
     public void setWriter(IWriter writer) {
         this.writer = writer;
     }
+
+    public void setTransforms(List<ITransform> transforms) { this.transforms = transforms; }
 
     public void execute() throws GenevereException {
         logger.info("Executing the pipeline");
@@ -36,14 +39,29 @@ public class Pipeline {
 
         Object[] row = new Object[numCols];
 
-        try {
-            writer.start();
-            while (true) {
-                reader.read(row);
-                writer.write(row);
+        if (transforms.size() == 0) {
+            try {
+                writer.start();
+                while (true) {
+                    reader.read(row);
+                    writer.write(row);
+                }
+            } catch (EOFException ex) {
+                // do nothing.
             }
-        } catch (EOFException ex) {
-            // do nothing.
+        } else {
+            try {
+                writer.start();
+                while (true) {
+                    reader.read(row);
+                    for (ITransform transform: transforms) {
+                        row = transform.transform(row);
+                    }
+                    writer.write(row);
+                }
+            } catch (EOFException ex) {
+                // do nothing.
+            }
         }
 
         writer.stop();
