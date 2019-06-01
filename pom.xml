@@ -6,7 +6,7 @@
 
   <groupId>org.gt</groupId>
   <artifactId>genevere</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
 
   <name>genevere</name>
   <!-- FIXME change it to the project's website -->
@@ -126,12 +126,105 @@
     </pluginManagement>
       <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <archive>
+                <manifest>
+                  <mainClass>org.gt.Genevere</mainClass>
+                </manifest>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-compiler-plugin</artifactId>
               <configuration>
                   <source>8</source>
                   <target>8</target>
               </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>rpm-maven-plugin</artifactId>
+            <version>2.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-rpm</id>
+                <goals>
+                  <goal>attached-rpm</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <license>Apache (c) 2019, gt</license>
+              <distribution>${project.artifactId}</distribution>
+              <group>Productivity/Databases/Clients</group>
+              <packager>gt</packager>
+              <prefix>/usr/local</prefix>
+              <changelogFile>ChangeLog</changelogFile>
+              <defineStatements>
+                <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+              </defineStatements>
+              <mappings>
+                <mapping>
+                  <directory>/usr/share/${project.artifactId}</directory>
+                  <filemode>755</filemode>
+                  <username>root</username>
+                  <groupname>root</groupname>
+                  <sources>
+                    <source>
+                      <location>${project.build.directory}/${project.build.finalName}.jar</location>
+                    </source>
+                  </sources>
+                </mapping>
+                <mapping>
+                  <directory>/usr/share/${project.artifactId}/lib</directory>
+                  <filemode>755</filemode>
+                  <username>root</username>
+                  <groupname>root</groupname>
+                  <dependency>
+                    <excludes>
+                      <exclude>junit:junit</exclude>
+                    </excludes>
+                  </dependency>
+                </mapping>
+                <mapping>
+                  <directory>/usr/local/bin</directory>
+                  <filemode>755</filemode>
+                  <username>root</username>
+                  <groupname>root</groupname>
+                  <sources>
+                    <source>
+                      <location>scripts/genevere</location>
+                    </source>
+                  </sources>
+                </mapping>
+                <mapping>
+                  <directory>/usr/share/${project.artifactId}/extlib</directory>
+                  <filemode>755</filemode>
+                  <username>root</username>
+                  <groupname>root</groupname>
+                  <sources>
+                    <source>
+                      <location>scripts/README</location>
+                    </source>
+                  </sources>
+                </mapping>
+              </mappings>
+              <preinstallScriptlet>
+                <script>echo "installing ${project.name} now"</script>
+              </preinstallScriptlet>
+<!--              <postinstallScriptlet>-->
+<!--                <scriptFile>src/main/scripts/postinstall</scriptFile>-->
+<!--                <fileEncoding>utf-8</fileEncoding>-->
+<!--                <filter>true</filter>-->
+<!--              </postinstallScriptlet>-->
+<!--              <preremoveScriptlet>-->
+<!--                <scriptFile>src/main/scripts/preremove</scriptFile>-->
+<!--                <fileEncoding>utf-8</fileEncoding>-->
+<!--              </preremoveScriptlet>-->
+            </configuration>
           </plugin>
       </plugins>
   </build>

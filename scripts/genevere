@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export CLASSPATH=/usr/share/genevere/lib/*:/usr/share/genevere/*:/usr/share/genevere/extlib
+java org.gt.Genevere $1
