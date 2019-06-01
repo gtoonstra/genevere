@@ -41,22 +41,16 @@ We can identify:
 
 * A class for connecting to a remote system to read data (reader), pushing out records in batches of a configured size,
   driven by custom input parameters.
-* A class that converts input records into records that have a java.sql.* type of interface, so that records can
-  always be treated in a common way and which is optimized for database transfers where no such conversion is needed.
-  (format conversion).
-* A range of "transformer" classes per column in the record if specified (transformation of java.sql.* types into other
-  java.sql.* types).
-* Another converter class which converts records with columns in java.sql.* types and converting that into the
-  destination record format, if so required, injected into the writer.
+* A class that knows about file formats if so required and can read and convert from a local file.
+* A list of "transform" classes which takes a record and returns a transformed record.
+* A class that can take the generalized data and convert that into a target file format.
 * A class for connecting to a remote system to write data (writer), writing records in batches of a configured size and
-  committing the data at configured intervals.
-* Allow extension of each of the above classes by dynamically instantiating the required objects when it builds the pipeline
-  and where each class has a clearly designed interface.
+  committing the data at configured intervals if it is possible to do with that system.
+* Allow for easy extension by utilizing interfaces and dynamic instantiation of classes.
 
-3. The process is driven by a configuration file, which configures the pipeline and runs it. All necessary elements are
-configured there.
+3. The process is driven by a single command file, which configures the pipeline and then runs it. 
 
-This allows a language like Python to connect to source and target systems, figure out which columns to select (generate the
-select query on the basis of the fields in the target table for example) and using that language to easily customize how
-the transfer works, but then to run the actual pipeline in a high performance runtime with optimized code and JIT
-compilation to native code.
+4. For security, credentials for both systems are picked up from 4 environment variables.
+
+In Python, you'd typically connect to both systems, figure out what work needs to be done and then
+write command file(s) to run the pipelines.
