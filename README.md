@@ -1,4 +1,4 @@
-### Genevere
+# Genevere
 
 Genevere is a generic ETL data pump written in Java designed to make it fast and easy to perform
 simple transfers of data between a source and a target.
@@ -23,8 +23,13 @@ The problems it is designed to solve:
   a source or target system. Local files can become rather large and use a lot of local disk I/O, which can have
   bandwidth limitations. So the objective is to always transfer records in batches kept in memory.
 
+### Examples
 
-# Design
+There are some example files here:
+
+https://github.com/gtoonstra/genevere/tree/master/examples
+
+### Design
 
 1. The design is created around the problem of "How do I get data from system A into system B as fast
 and easy as possible with as little effort as possible?"
