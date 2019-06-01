@@ -1,19 +1,16 @@
 source:
   java_class: org.gt.connections.jdbc.JdbcReader
-  reader:
-    fetch_size: 1000
   config:
+    fetch_size: 1000
     jdbc_url: jdbc:postgresql://localhost:5432/dvdrentals
     sql: >
       SELECT rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update
       FROM public.rental
 target:
   java_class: org.gt.connections.jdbc.JdbcWriter
-  writer:
+  config:
     batch_size: 1000
     commit_size: 1000
-    num_cols: 6
-  config:
     jdbc_url: jdbc:mysql://localhost:3306/airflow?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Amsterdam&rewriteBatchedStatements=true
     sql: >
       INSERT INTO rental ( rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update )
@@ -37,3 +34,4 @@ transforms:
 
           return xformed;
         };
+timeout: 5

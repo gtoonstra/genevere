@@ -16,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class StorageWriter extends StorageReaderWriter implements IWriter {
 
@@ -23,35 +24,44 @@ public class StorageWriter extends StorageReaderWriter implements IWriter {
 
     private BlobInfo blobInfo;
     private IWriteConverter converter;
+    private String bucket;
+    private String blobName;
+    private String contentType;
+    private String converterClass;
 
-    public void prepareTarget() throws GenevereException {
-        String bucket = this.props.get("bucket");
+    public void configure(Map<String, String> props) throws GenevereException {
+        super.configure(props);
+
+        bucket = props.get("bucket");
         if (bucket == null) {
             logger.error("The bucket property is not set in the writer config");
             throw new GenevereException("The bucket property is not set in the writer config");
         }
-        String blob_name = this.props.get("blob_name");
-        if (blob_name == null) {
+        blobName = props.get("blob_name");
+        if (blobName == null) {
             logger.error("The blob_name property is not set in the writer config");
             throw new GenevereException("The blob_name property is not set in the writer config");
         }
-        String contentType = this.props.get("content_type");
+        contentType = props.get("content_type");
         if (contentType == null) {
             logger.error("The content_type property is not set in the writer config");
             throw new GenevereException("The content_type property is not set in the writer config");
         }
 
-        String converterClass = Utils.getSafeString(props, "converter", "org.gt.conversions.read.ToJsonConverter");
+        converterClass = Utils.getSafeString(props, "converter", "org.gt.conversions.read.ToJsonConverter");
+    }
+
+    public void prepareTarget() throws GenevereException {
         converter = Utils.getWriteConverter(converterClass);
         converter.open(tmpFile.getAbsolutePath());
 
-        BlobId blobId = BlobId.of(bucket, blob_name);
+        BlobId blobId = BlobId.of(bucket, blobName);
         blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build();
     }
 
     public void write(Object[] data) throws GenevereException {
         converter.next(data);
-        numTotal++;
+        totalRecords++;
     }
 
     public void terminate() throws GenevereException {

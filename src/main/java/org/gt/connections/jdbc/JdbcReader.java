@@ -4,9 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gt.GenevereException;
 import org.gt.pipeline.IReader;
+import org.gt.pipeline.Utils;
 
 import java.io.EOFException;
 import java.sql.*;
+import java.util.Map;
 
 public class JdbcReader extends JdbcReaderWriter implements IReader {
 
@@ -14,14 +16,27 @@ public class JdbcReader extends JdbcReaderWriter implements IReader {
 
     private ResultSet rs;
     private int numColumns;
+    private int fetchSize;
+    private String sql;
 
-    public void prepareSource() throws GenevereException {
-        String sql = this.props.get("sql");
+    public void configure(Map<String, String> props) throws GenevereException {
+        super.configure(props);
+
+        if (props == null || props.isEmpty()) {
+            logger.error("No reader configuration detected");
+            throw new GenevereException("No reader configuration detected");
+        }
+        fetchSize = Utils.getSafeInt(props, "batch_size", 100);
+        logger.info("Using a fetch size of: " + fetchSize);
+
+        sql = props.get("sql");
         if (sql == null) {
             logger.error("The sql property is not set in the reader config");
             throw new GenevereException("The sql property is not set in the reader config");
         }
+    }
 
+    public void prepareSource() throws GenevereException {
         try {
             Statement stmt = this.conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.FETCH_FORWARD);
             stmt.setFetchSize(fetchSize);

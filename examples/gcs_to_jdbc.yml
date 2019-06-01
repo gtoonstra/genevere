@@ -6,10 +6,9 @@ source:
     converter: org.gt.conversions.read.FromJsonConverter
 target:
   java_class: org.gt.connections.jdbc.JdbcWriter
-  writer:
+  config:
     batch_size: 1000
     commit_size: 1000
-  config:
     jdbc_url: jdbc:mysql://localhost:3306/airflow?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Amsterdam&rewriteBatchedStatements=true
     sql: >
       INSERT INTO stations ( station_id, name, status, latitude, longitude, location )

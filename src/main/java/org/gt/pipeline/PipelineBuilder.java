@@ -18,14 +18,12 @@ public class PipelineBuilder {
 
         ReaderWriterConfig source = config.getSource();
         IReader reader = source.getReaderObject();
-        reader.init_reader(source.getReader());
-        reader.setConfiguration(source.getConfig());
+        reader.configure(source.getConfig());
         reader.connect(config.getSourceUsername(), config.getSourcePassword());
 
         ReaderWriterConfig target = config.getTarget();
         IWriter writer = target.getWriterObject();
-        writer.init_writer(target.getWriter());
-        writer.setConfiguration(target.getConfig());
+        writer.configure(target.getConfig());
         writer.connect(config.getTargetUsername(), config.getTargetPassword());
 
         pipeline.setReader(reader);
@@ -41,6 +39,8 @@ public class PipelineBuilder {
             }
         }
         pipeline.setTransforms(transforms);
+
+        pipeline.setTimeout(config.getTimeout());
 
         return pipeline;
     }

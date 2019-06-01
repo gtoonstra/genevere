@@ -10,24 +10,24 @@ import org.gt.pipeline.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 public class StorageReaderWriter extends BaseReaderWriter {
     private static final Logger logger = LogManager.getLogger();
 
     protected Storage storage;
-    protected Map<String, String> props;
     protected File tmpFile;
+    private String prefix;
+    private String suffix;
 
-    public void setConfiguration(Map<String, String> props) {
-        this.props = props;
+    public void configure(Map<String, String> props) throws GenevereException {
+        prefix = Utils.getSafeString(props, "prefix", "gene");
+        suffix = Utils.getSafeString(props, "suffix", "vere");
     }
 
     public void connect(String username, String password) throws GenevereException {
         storage = StorageOptions.getDefaultInstance().getService();
-
-        String prefix = Utils.getSafeString(props, "prefix", "gene");
-        String suffix = Utils.getSafeString(props, "suffix", "vere");
 
         try {
             tmpFile = File.createTempFile(prefix, suffix);
@@ -37,5 +37,9 @@ public class StorageReaderWriter extends BaseReaderWriter {
         }
 
         tmpFile.deleteOnExit();
+    }
+
+    public void terminate() throws GenevereException {
+        // not much that can be done here.
     }
 }

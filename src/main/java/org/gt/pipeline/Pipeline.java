@@ -10,6 +10,8 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryUsage;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Pipeline {
 
@@ -18,6 +20,7 @@ public class Pipeline {
     private IReader reader;
     private IWriter writer;
     private List<ITransform> transforms;
+    private long timeout;
 
     public void setReader(IReader reader) {
         this.reader = reader;
@@ -29,12 +32,37 @@ public class Pipeline {
 
     public void setTransforms(List<ITransform> transforms) { this.transforms = transforms; }
 
+    public void setTimeout(long timeout) {
+        logger.info("Using a timeout of " + timeout + " seconds.");
+        this.timeout = timeout;
+    }
+
     public void execute() throws GenevereException {
         logger.info("Executing the pipeline");
 
         reader.prepareSource();
         int numCols = reader.getNumColumns();
         writer.prepareTarget();
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                logger.warn("Process timed out!");
+                try {
+                    reader.terminate();
+                } catch (GenevereException ex) {
+                    logger.error(ex);
+                }
+                try {
+                    writer.terminate();
+                } catch (GenevereException ex) {
+                    logger.error(ex);
+                }
+                System.exit(-2);
+            };
+        };
+        timer.schedule(task,timeout * 1000);
 
         Object[] row = new Object[numCols];
 
@@ -63,6 +91,8 @@ public class Pipeline {
                 // do nothing.
             }
         }
+
+        timer.cancel();
 
         writer.stop();
         writer.terminate();

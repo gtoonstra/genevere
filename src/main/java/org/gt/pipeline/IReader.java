@@ -6,10 +6,10 @@ import java.io.EOFException;
 import java.util.Map;
 
 public interface IReader {
-    void setConfiguration(Map<String, String> props);
+    void configure(Map<String, String> props) throws GenevereException;
     void connect(String username, String password) throws GenevereException;
     void prepareSource() throws GenevereException;
     int getNumColumns();
     void read(Object[] row) throws GenevereException, EOFException;
-    void init_reader(Map<String, String> config) throws GenevereException;
+    void terminate() throws GenevereException;
 }

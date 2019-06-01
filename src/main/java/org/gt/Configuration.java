@@ -6,7 +6,6 @@ import org.gt.pipeline.ReaderWriterConfig;
 import org.gt.pipeline.TransformConfig;
 
 import java.util.List;
-import java.util.Map;
 
 public class Configuration {
 
@@ -16,6 +15,7 @@ public class Configuration {
     private static final String SOURCE_PASSWORD = "SOURCE_PASSWORD";
     private static final String TARGET_USERNAME = "TARGET_USERNAME";
     private static final String TARGET_PASSWORD = "TARGET_PASSWORD";
+    private static final long DEFAULT_TIMEOUT = 3600;
 
     private ReaderWriterConfig source;
     private ReaderWriterConfig target;
@@ -28,6 +28,8 @@ public class Configuration {
     private String sourcePassword;
     private String targetUsername;
     private String targetPassword;
+
+    private long timeout;
 
     public ReaderWriterConfig getSource() {
         return source;
@@ -67,6 +69,17 @@ public class Configuration {
 
     public void setTransforms(List<TransformConfig> transforms) {
         this.transforms = transforms;
+    }
+
+    public long getTimeout() {
+        if (timeout <= 0) {
+            return DEFAULT_TIMEOUT;
+        }
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 
     public String getSourceUsername() {

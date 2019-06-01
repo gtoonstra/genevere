@@ -15,14 +15,22 @@ public abstract class JdbcReaderWriter extends BaseReaderWriter {
     private static final Logger logger = LogManager.getLogger();
 
     protected Connection conn;
-    protected Map<String, String> props;
+    private String jdbcUrl;
 
-    public void setConfiguration(Map<String, String> props) {
-        this.props = props;
+    public void configure(Map<String, String> props) throws GenevereException {
+        jdbcUrl = props.get("jdbc_url");
+    }
+
+    public void terminate() throws GenevereException {
+        try {
+            this.conn.close();
+        } catch (SQLException ex) {
+            logger.error(ex);
+            throw new GenevereException("Could not terminate connection", ex);
+        }
     }
 
     public void connect(String username, String password) throws GenevereException {
-        String jdbcUrl = props.get("jdbc_url");
         try {
             this.conn = DriverManager.getConnection(jdbcUrl, username, password);
             this.conn.setAutoCommit(false);
