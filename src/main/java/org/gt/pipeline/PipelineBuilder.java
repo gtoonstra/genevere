@@ -33,10 +33,12 @@ public class PipelineBuilder {
 
         List<ITransform> transforms = new ArrayList<ITransform>();
         List<TransformConfig> transformConfigs = config.getTransforms();
-        for (TransformConfig transformConfig: transformConfigs) {
-            ITransform transform = transformConfig.getTransform();
-            transform.init_transform(transformConfig.getConfig());
-            transforms.add(transform);
+        if (transformConfigs != null) {
+            for (TransformConfig transformConfig : transformConfigs) {
+                ITransform transform = transformConfig.getTransform();
+                transform.init_transform(transformConfig.getConfig());
+                transforms.add(transform);
+            }
         }
         pipeline.setTransforms(transforms);
 

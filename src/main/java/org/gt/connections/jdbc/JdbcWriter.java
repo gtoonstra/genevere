@@ -29,13 +29,9 @@ public class JdbcWriter extends JdbcReaderWriter implements IWriter {
         }
     }
 
-    public void setNumCols(int numCols) {
-        this.numCols = numCols;
-    }
-
     public void write(Object[] row) throws GenevereException {
         try {
-            for (int i = 0; i < numCols; i++) {
+            for (int i = 0; i < row.length; i++) {
                 ps.setObject(i + 1, row[i]);
             }
             ps.addBatch();

@@ -1,0 +1,13 @@
+source:
+  java_class: org.gt.connections.google.StorageReader
+  config:
+    bucket: gerard-my-bucket
+    blob_name: source.json
+    converter: org.gt.conversions.read.FromJsonConverter
+target:
+  java_class: org.gt.connections.google.StorageWriter
+  config:
+    bucket: gerard-my-bucket
+    blob_name: destination.json
+    content_type: text/plain
+    converter: org.gt.conversions.write.ToJsonConverter

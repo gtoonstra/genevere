@@ -21,6 +21,10 @@ public class BaseReaderWriter implements IStopWatch {
     private Stopwatch stopWatch = new Stopwatch();
 
     public void init_writer(Map<String, String> props) throws GenevereException {
+        if (props == null || props.isEmpty()) {
+            logger.info("No writer configuration detected.");
+            return;
+        }
         batchSize = Utils.getSafeLong(props, "batch_size", Long.MAX_VALUE);
         commitSize = Utils.getSafeLong(props, "commit_size", Long.MAX_VALUE);
         logger.info("Using a batch size of: " + batchSize + " and commit size of: " + commitSize);
@@ -36,6 +40,10 @@ public class BaseReaderWriter implements IStopWatch {
     }
 
     public void init_reader(Map<String, String> props) throws GenevereException {
+        if (props == null || props.isEmpty()) {
+            logger.info("No reader configuration detected");
+            return;
+        }
         fetchSize = Utils.getSafeInt(props, "batch_size", 100);
         logger.info("Using a fetch size of: " + fetchSize);
     }

@@ -48,20 +48,8 @@ public class ReaderWriterConfig {
     }
 
     public IReader getReaderObject() throws GenevereException {
-        Class<?> clazz = null;
         try {
-            clazz = Class.forName(java_class);
-            IReader readerWriter = (IReader) clazz.newInstance();
-            return readerWriter;
-        } catch (ClassNotFoundException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " not found", e);
-        } catch (InstantiationException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " could not be instantiated", e);
-        } catch (IllegalAccessException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " has illegal access in constructor", e);
+            return (IReader)Utils.createClass(java_class);
         } catch (ClassCastException e) {
             logger.error(e);
             throw new GenevereException("Class " + java_class + " could not be cast to the IReader interface", e);
@@ -69,20 +57,8 @@ public class ReaderWriterConfig {
     }
 
     public IWriter getWriterObject() throws GenevereException {
-        Class<?> clazz = null;
         try {
-            clazz = Class.forName(java_class);
-            IWriter readerWriter = (IWriter) clazz.newInstance();
-            return readerWriter;
-        } catch (ClassNotFoundException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " not found", e);
-        } catch (InstantiationException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " could not be instantiated", e);
-        } catch (IllegalAccessException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " has illegal access in constructor", e);
+            return (IWriter)Utils.createClass(java_class);
         } catch (ClassCastException e) {
             logger.error(e);
             throw new GenevereException("Class " + java_class + " could not be cast to the IWriter interface", e);

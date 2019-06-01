@@ -34,7 +34,6 @@ public class Pipeline {
 
         reader.prepareSource();
         int numCols = reader.getNumColumns();
-        writer.setNumCols(numCols);
         writer.prepareTarget();
 
         Object[] row = new Object[numCols];
@@ -53,6 +52,7 @@ public class Pipeline {
             try {
                 writer.start();
                 while (true) {
+                    row = new Object[numCols];
                     reader.read(row);
                     for (ITransform transform: transforms) {
                         row = transform.transform(row);

@@ -30,20 +30,8 @@ public class TransformConfig {
     }
 
     public ITransform getTransform() throws GenevereException {
-        Class<?> clazz = null;
         try {
-            clazz = Class.forName(java_class);
-            ITransform transform = (ITransform) clazz.newInstance();
-            return transform;
-        } catch (ClassNotFoundException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " not found", e);
-        } catch (InstantiationException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " could not be instantiated", e);
-        } catch (IllegalAccessException e) {
-            logger.error(e);
-            throw new GenevereException("Class " + java_class + " has illegal access in constructor", e);
+            return (ITransform)Utils.createClass(java_class);
         } catch (ClassCastException e) {
             logger.error(e);
             throw new GenevereException("Class " + java_class + " could not be cast to the ITransform interface", e);

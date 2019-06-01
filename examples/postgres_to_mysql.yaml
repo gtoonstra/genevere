@@ -12,6 +12,7 @@ target:
   writer:
     batch_size: 1000
     commit_size: 1000
+    num_cols: 6
   config:
     jdbc_url: jdbc:mysql://localhost:3306/airflow?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Amsterdam&rewriteBatchedStatements=true
     sql: >
@@ -36,5 +37,3 @@ transforms:
 
           return xformed;
         };
-#sourceConversion:
-#targetConversion:

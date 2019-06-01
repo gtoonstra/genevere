@@ -1,7 +1,7 @@
 ### Genevere
 
-Genevere is a generic ETL framework written in Java designed to make it easy to perform
-simple transfers of data between a source and a target. The designed
+Genevere is a generic ETL data pump written in Java designed to make it fast and easy to perform
+simple transfers of data between a source and a target.
 
 The problems it is designed to solve:
 
