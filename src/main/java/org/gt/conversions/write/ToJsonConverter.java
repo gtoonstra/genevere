@@ -1,13 +1,14 @@
 package org.gt.conversions.write;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gt.GenevereException;
 import org.gt.pipeline.IWriteConverter;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ToJsonConverter implements IWriteConverter {
 
